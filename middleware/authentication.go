@@ -6,6 +6,7 @@ import (
 	"os"
 	"strings"
 	"time"
+
 	jwt "github.com/dgrijalva/jwt-go"
 )
 
@@ -23,14 +24,8 @@ func GenerateToken(userid string) string {
 	td := &TokenDetails{}
 	td.AtExpires = time.Now().Add(time.Hour * 10).Unix()
 	td.AccessUuid = userid
-
-	// td.RtExpires = time.Now().Add(time.Hour * 24 * 7).Unix()
-	// td.RefreshUuid = uuid.NewV4().String()
-
 	atClaims := jwt.MapClaims{}
-	// os.Setenv("ACCESS_SECRET", "jdnfksdmfksd")
 	atClaims["authorized"] = true
-//	atClaims["access_uuid"] = td.AccessUuid
 	atClaims["user_id"] = userid
 	atClaims["exp"] = td.AtExpires
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
@@ -49,9 +44,7 @@ func TokenValid(r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("token is ", token.Claims)
-	res, ok := token.Claims.(jwt.Claims)
-	fmt.Printf("lllllllllllllllllll %+v", res)
+	_, ok := token.Claims.(jwt.Claims)
 	if !ok && !token.Valid {
 		return err
 	}
@@ -61,7 +54,6 @@ func TokenValid(r *http.Request) error {
 func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	tokenString := ExtractToken(r)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		//Make sure that the token method conform to "SigningMethodHMAC"
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
@@ -76,7 +68,6 @@ func VerifyToken(r *http.Request) (*jwt.Token, error) {
 
 func ExtractToken(r *http.Request) string {
 	bearToken := r.Header.Get("Authorization")
-	//normally Authorization the_token_xxx
 	strArr := strings.Split(bearToken, " ")
 	if len(strArr) == 2 {
 		return strArr[1]

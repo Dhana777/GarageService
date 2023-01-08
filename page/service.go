@@ -13,25 +13,10 @@ import (
 type HandlerService struct{}
 
 func (hs *HandlerService) Bootstrap(r *gin.Engine) {
-	// qrg := r.Group("/v1/api")
-	// qrg.Use(common.ValidateToken())
-	// qrg.DELETE("/pages/:id", hs.DeletePageDetailsById)
-	// qrg.POST("/pages/:id/available", hs.PageAvailabilityUpdate)
-	// qrg.GET("/pages", hs.GetAllPagesListBySearchText)
-	// qrg.GET("/pages/ordered", hs.PageOrder)
-	// qrg.POST("/pages/ordered", hs.UpdatePageOrder)
-	// qrg.GET("/pages/summary", hs.GetPagesListBySearchText)
-	// qrg.POST("/pages", hs.CreateOrUpdatePageDetails)
-	// qrg.POST("/pages/:id", hs.CreateOrUpdatePageDetails)
-	// qrg.GET("/pages/:id/region", hs.GetallPageRegionsByPageId)
-	// r.GET("/v1/:lang/api/page/:id", hs.PageInfobyPageid)
 
-	// // xms apis
-	// qrg.GET("/pages/:id", hs.XmsPageDetailsbyPageid)
 
 	r.POST("/signup", hs.SignUp)
 	r.GET("/login", hs.Login)
-	// r.GET("/cardetials", hs.GetCarDetails)
 	r.POST("/car", hs.CreateCarDetails)
 	r.GET("/car", hs.GetCarDetails)
 	r.GET("/car/:id", hs.GetCarDetailsById)
@@ -90,8 +75,6 @@ func (hs *HandlerService) GetCarDetails(c *gin.Context) {
 func (hs *HandlerService) GetCarDetailsById(c *gin.Context) {
 	var cardetails []Car
 	h := c.MustGet("DB").(*gorm.DB)
-	//	var r *http.Request
-	// middleware.TokenValid(r)
 	if err := h.Table("car").Where("id=?", c.Param("id")).Find(&cardetails).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 	}
