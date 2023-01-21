@@ -47,3 +47,34 @@ type UserLoginReq struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 }
+
+type TransactionReq struct {
+	Amount    float32   `json:"amount"`
+	CreatedAt time.Time `json:"timestamp"`
+	UserId    string    `json:"userId"`
+}
+
+type Transaction struct {
+	Id        string    `json:"id"`
+	Amount    float32   `json:"amount"`
+	CreatedAt time.Time `json:"createdAt"`
+	IsDeleted bool      `json:"isDeleted"`
+	UserId    string    `json:"userId"`
+}
+
+type LocationReq struct {
+	City string `json:"city"`
+}
+
+type UserDetails struct {
+	Id   string `json:"id"`
+	City string `json:"city"`
+}
+
+type TransactionDetails struct {
+	Max   float32 `json:"max"`
+	Min   float32 `json:"min"`
+	Avg   float32 `json:"avg"`
+	Sum   float32 `json:"sum"`
+	Count int     `json:"count"`
+}

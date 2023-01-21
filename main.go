@@ -28,10 +28,9 @@ func main() {
 	}
 	fmt.Println("db connected succesfully")
 	defer db.Close()
-
-	db.DB().SetMaxIdleConns(10)
-	db.LogMode(true)
 	db.SingularTable(true)
+	db.AutoMigrate(&page.Transaction{})
+	db.AutoMigrate(&page.UserDetails{})
 
 	router.Use(func(c *gin.Context) {
 		c.Set("DB", db)
